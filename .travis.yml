@@ -1,21 +1,20 @@
+os:
+  - osx
 
-# Sets Travis to run the Ruby specs on OS X machines which are required to
-# build the native extensions of Xcodeproj.
-#
-language: objective-c
+language: ruby
+
+rvm:
+  - 1.8.7
+  - 1.9.3
+  - 2.0.0
 
 env:
-  - RVM_RUBY_VERSION=system
-  - RVM_RUBY_VERSION=1.8.7-p358
+  - LANG=en_US.UTF-8
 
 before_install:
-  - export LANG=en_US.UTF-8
+  - export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
   - curl http://curl.haxx.se/ca/cacert.pem -o /usr/local/share/cacert.pem
-  - source ~/.rvm/scripts/rvm
-  - if [[ $RVM_RUBY_VERSION != 'system' ]]; then rvm install $RVM_RUBY_VERSION; fi
-  - rvm use $RVM_RUBY_VERSION
-  - if [[ $RVM_RUBY_VERSION == 'system' ]]; then export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future; fi
-  - if [[ $RVM_RUBY_VERSION == 'system' ]]; then sudo gem install bundler --no-ri --no-rdoc; else gem install bundler --no-ri --no-rdoc; fi
+  - gem install bundler --no-ri --no-rdoc
 
 install:
   - bundle install --without=debugging documentation --path ./travis_bundle_dir
